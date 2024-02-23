@@ -1,7 +1,41 @@
+<?php 
+$conn = new mysqli("localhost", "root", "", "web_stnikolas");
+if ($conn->connect_errno) {
+    echo "Failed to connect to MySQL: " . $conn->connect_error;
+} else {
+    echo "Connected to MySQL successfully!";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
-
+<style>
+    /* Style for pop-up */
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 9999;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+    /* Style for overlay */
+    .overlay {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 9998;
+    }
+</style>
 <head>
+    <script src="js/jquery-3.3.1.min.js"></script>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,7 +59,7 @@
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item nav-profile dropdown">
+          <!-- <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
               <div class="nav-profile-img">
                 <img src="images/faces/face1.jpg" alt="image">
@@ -46,7 +80,7 @@
                 Signout
               </a>
             </div>
-          </li>
+          </li> -->
           <!-- <li class="nav-item d-none d-lg-block full-screen-link">
             <a class="nav-link">
               <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
@@ -196,7 +230,7 @@
               <span class="page-title-icon bg-gradient-primary text-white mr-2">
                 <i class="mdi mdi-home"></i>                 
               </span>
-              Dashboard
+              Mini Quiz Dashboard
             </h3>
           </div>
           
@@ -209,19 +243,49 @@
                     <table class="table">
                       <thead>
                         <tr>
-                          <th>
-                            Pertanyaan
-                          </th>
-                          <th>
-                            Jawaban
-                          </th>
-                          <th>
-                            Action
-                          </th>
+                            <th>
+                              Pertanyaan
+                            </th>
+                            <th style="width: 400px;">
+                              Jawaban
+                            </th>
+                            <th>
+                              Action
+                            </th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
+                    <table border='0' style='border-collapse: separate; width: 100%;'>
+                      <?php
+                      // $questions = array(
+                      //   "Siapa nama tokoh asli Santo Nikolas?" => array("A. Santo Benediktus", "B. Santo Albertus", "C. Santo Nikolas"),
+                      //   "Siapa nama orang tua Santo Nikolas?" => array("A. Theophanes dan Joan", "B. Samuel dan Brigitta", "C. Stefanus dan Maria"),
+                      //   "Tahun berapa Santo Nikolas lahir?" => array("A. Tahun 270", "B. Tahun 300", "C. Tahun 343"),
+                      //   "Dimanakah Santo Nikolas lahir?" => array("A. Patara", "B. Myra", "C. Roma"),
+                      //   "Santo Nikolas merupakan Santo Pelindung apa?" => array("A. Pelindung Anak-anak", "B. Pelindung Orang Sakit", "C. Pelindung Perjalanan"),
+                      //   "Apa peristiwa buruk yang dialami oleh Santo Nikolas saat masih kecil?" => array("A. Hartanya dirampas orang", "B. Orangtuanya meninggal karena wabah penyakit", "C. Ia dijauhi oleh"),
+                      //   "Paman dari Nikolas adalah seorang .... Patara." => array("A. Biarawan", "B. Uskup", "C. Romo"),
+                      //   "Apa kebaikan terkenal yang pernah dilakukan oleh Santo Nikolas?" => array("A. Menyelamatkan seorang bapak dan 3 puterinya", "B. Menyembuhkan orang sakit", "C. Membangun Gereja untuk umatnya"),
+                      //   "Tanggal berapa Santo Nikolas meninggal?" => array("A. 10 Maret 343", "B. 25 Agustus 343", "C. 6 Desember 343"),
+                      //   "Apa bahasa belanda dari nama Santa Claus?" => array("A. Mr Sancta", "B. Sanct Herr Nicholaas", "C. Bapak Natal")
+                      // );
+
+                        // Loop through each question
+                      // include 'store_question.php';
+                      // foreach ($questions as $question => $answers) {
+                      //   echo "<tr>";
+                      //   echo "<td style='width: 650px; padding: 10px;'>$question</td>";
+                      //   echo "<td style='width: 300px; padding: 10px;'>";
+                      //   foreach ($answers as $answer) {
+                      //     echo "$answer<br>";
+                      //   }
+                      //   echo "</td>";
+                      //   echo "<td style='padding: 10px;'><button class='btn btn-danger' onclick='removeQuestion(this)'>HAPUS PERTANYAAN</button></td>";
+                      //   echo "</tr>";
+                      // }
+                      // ?>
+                    </table>
+<!--                         <tr>
                           <td>
                             Tanggal berapa Santo Nikolas Lahir ?
                           </td>
@@ -231,12 +295,34 @@
                           <td>
                             <button class="btn btn-danger">HAPUS PERTANYAAN</button>
                           </td>
-                        </tr>
-                        <th>
-                          <button class="btnTambah">+</button>
-                        </th>
+                        </tr> -->
                       </tbody>
                     </table>
+                    <!-- Add New Question Popup -->
+                    <div class="popup" id="popup">
+                      <h2>Add New Question</h2>
+                      <form method="post" action="store_question.php">
+                        <label for="question">Question:</label><br>
+                        <input type="text" id="question" name="question"><br>
+                        <label for="answer1">Answer 1:</label><br>
+                        <input type="text" id="answer1" name="answer1"><br>
+                        <label for="answer2">Answer 2:</label><br>
+                        <input type="text" id="answer2" name="answer2"><br>
+                        <label for="answer3">Answer 3:</label><br>
+                        <input type="text" id="answer3" name="answer3"><br><br>
+                        <label for="correct_answer">Correct Answer:</label><br>
+                        <select id="correct_answer" name="correct_answer">
+                          <option value="1">Answer 1</option>
+                          <option value="2">Answer 2</option>
+                          <option value="3">Answer 3</option>
+                        </select><br><br>
+                        <button type="submit">Add Question</button>
+                        <button type="button" onclick="closePopup()">Cancel</button>
+                      </form>
+                  </div>
+
+<!-- Button to open popup -->
+<button onclick="openPopup()">Add New Question</button>
                   </div>
                 </div>
               </div>
@@ -257,8 +343,24 @@
     </div>
     <!-- page-body-wrapper ends -->
   </div>
-  <!-- container-scroller -->
-  <script src="js/dashboard.js"></script>
+<!-- JavaScript function to open and close popup -->
+<script>
+    function openPopup() {
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+
+    // JavaScript function to remove question row
+    function removeQuestion(button) {
+        var row = button.parentNode.parentNode;
+        row.remove();
+    }
+</script>
 </body>
 
 </html>
