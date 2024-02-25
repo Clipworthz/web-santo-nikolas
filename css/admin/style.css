@@ -17327,7 +17327,7 @@ input:focus {
 /* Sidebar */
 .sidebar {
   min-height: calc(100vh - 70px);
-  background: #ffffff;
+  background: #d4d4d4;
   font-family: "ubuntu-regular", sans-serif;
   padding: 0;
   width: 260px;
@@ -17736,7 +17736,7 @@ input:focus {
   -webkit-transition: width 0.25s ease, background 0.25s ease;
   -moz-transition: width 0.25s ease, background 0.25s ease;
   -ms-transition: width 0.25s ease, background 0.25s ease;
-  background: #ffffff;
+  background: #0a335f;
   width: 260px;
   height: 70px;
 }

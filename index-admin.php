@@ -1,10 +1,8 @@
 <?php 
 $conn = new mysqli("localhost", "root", "", "web_stnikolas");
 if ($conn->connect_errno) {
-    echo "Failed to connect to MySQL: " . $conn->connect_error;
-} else {
-    echo "Connected to MySQL successfully!";
-}
+    die("Failed to connect to MySQL: " . $conn->connect_error);
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,8 +52,7 @@ if ($conn->connect_errno) {
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo px-5" href="index.html">Admin Santo Nikolas</a>
-        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo-mini.svg" alt="logo"/></a>
+        <a style="font-size:20px; color:white; background-color:#0a335f;"class="navbar-brand brand-logo px-5" href="index-admin.php">Admin Santo Nikolas</a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
         <ul class="navbar-nav navbar-nav-right">
@@ -207,11 +204,20 @@ if ($conn->connect_errno) {
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
-          <li class="nav-item">
+          <li class="nav-item" style="border-bottom:1px solid #0a335f">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-              <span class="menu-title">Mini Quiz</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+              <span class="menu-title"><b>Mini Quiz</b></span>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item" style="border-bottom:1px solid #0a335f">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <span class="menu-title"><b>Logout</b></span>
             </a>
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
@@ -226,11 +232,13 @@ if ($conn->connect_errno) {
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="page-header">
-            <h3 class="page-title">
+            <h3 class="page-title d-flex align-items-center">
               <span class="page-title-icon bg-gradient-primary text-white mr-2">
                 <i class="mdi mdi-home"></i>                 
               </span>
-              Mini Quiz Dashboard
+              <span class="ml-2">
+                <b>Mini Quiz Dashboard</b>
+              </span>
             </h3>
           </div>
           
@@ -238,13 +246,21 @@ if ($conn->connect_errno) {
             <div class="col-12 grid-margin">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title"><b>Daftar Pertanyaan</b></h4>
+                  <!-- Button to open popup -->
+                  <button class="btn btn-sm btn-info mb-3" onclick="openPopup()">Add New Question</button>
+                  <h4 class="card-title"><b>Daftar Pertanyaan & Jawaban</b></h4>
                   <div class="table-responsive">
                     <table class="table">
                       <thead>
                         <tr>
                             <th>
+                              No.
+                            </th>
+                            <th>
                               Pertanyaan
+                            </th>
+                            <th>
+                              Gambar Pertanyaan
                             </th>
                             <th style="width: 400px;">
                               Jawaban
@@ -255,7 +271,6 @@ if ($conn->connect_errno) {
                         </tr>
                       </thead>
                       <tbody>
-                    <table border='0' style='border-collapse: separate; width: 100%;'>
                       <?php
                       // $questions = array(
                       //   "Siapa nama tokoh asli Santo Nikolas?" => array("A. Santo Benediktus", "B. Santo Albertus", "C. Santo Nikolas"),
@@ -270,59 +285,78 @@ if ($conn->connect_errno) {
                       //   "Apa bahasa belanda dari nama Santa Claus?" => array("A. Mr Sancta", "B. Sanct Herr Nicholaas", "C. Bapak Natal")
                       // );
 
-                        // Loop through each question
-                      // include 'store_question.php';
-                      // foreach ($questions as $question => $answers) {
-                      //   echo "<tr>";
-                      //   echo "<td style='width: 650px; padding: 10px;'>$question</td>";
-                      //   echo "<td style='width: 300px; padding: 10px;'>";
-                      //   foreach ($answers as $answer) {
-                      //     echo "$answer<br>";
-                      //   }
-                      //   echo "</td>";
-                      //   echo "<td style='padding: 10px;'><button class='btn btn-danger' onclick='removeQuestion(this)'>HAPUS PERTANYAAN</button></td>";
-                      //   echo "</tr>";
-                      // }
-                      // ?>
-                    </table>
-<!--                         <tr>
-                          <td>
-                            Tanggal berapa Santo Nikolas Lahir ?
-                          </td>
-                          <td>
-                            <button class="btn btn-success">TAMPILKAN OPSI</button>
-                          </td>
-                          <td>
-                            <button class="btn btn-danger">HAPUS PERTANYAAN</button>
-                          </td>
-                        </tr> -->
+                      $sql_question = "SELECT id_question, question_text, question_pic
+                      FROM questions GROUP BY id_question";
+                      
+                      $number = 1;
+
+                      $result_question = $conn->query($sql_question);
+
+                      if($result_question->num_rows > 0) {
+                        while($row_question = $result_question->fetch_assoc()) {
+                          echo "<tr>";
+                            echo "<td>". $number++ ."</td>";
+                            echo "<td style='width:65%'>". $row_question["question_text"] ."</td>";
+                            
+                            if($row_question["question_pic"] != null)
+                            {
+                              echo "<td><button class='btn btn-sm btn-info'>TAMPILKAN GAMBAR</button></td>";
+                            }
+                            else
+                            {
+                              echo "<td>Tidak Ada Gambar</td>";
+                            }
+                            echo "<td><button class='btn btn-sm btn-success' onClick='openPopupOption(".$row_question['id_question'].")'>TAMPILKAN OPSI</button></td>";
+                            echo "<td><button class='btn btn-sm btn-danger' onClick='openPopupDelete(".$row_question['id_question'].")'>HAPUS PERTANYAAN</button></td>";
+                          echo "</tr>";
+                        }
+                      }
+                      else {
+                        echo "Tidak ada data pertanyaan!";
+                      }
+                      ?>
                       </tbody>
                     </table>
-                    <!-- Add New Question Popup -->
-                    <div class="popup" id="popup">
+                    <!-- Open New Question Popup -->
+                    <div class="popup" id="popup-new-question">
                       <h2>Add New Question</h2>
                       <form method="post" action="store_question.php">
                         <label for="question">Question:</label><br>
-                        <input type="text" id="question" name="question"><br>
+                        <input class="mb-2" type="text" id="question" name="question"><br>
                         <label for="answer1">Answer 1:</label><br>
-                        <input type="text" id="answer1" name="answer1"><br>
+                        <input class="mb-2" type="text" id="answer1" name="answer1"><br>
                         <label for="answer2">Answer 2:</label><br>
-                        <input type="text" id="answer2" name="answer2"><br>
+                        <input class="mb-2" type="text" id="answer2" name="answer2"><br>
                         <label for="answer3">Answer 3:</label><br>
-                        <input type="text" id="answer3" name="answer3"><br><br>
+                        <input class="mb-2" type="text" id="answer3" name="answer3"><br><br>
                         <label for="correct_answer">Correct Answer:</label><br>
                         <select id="correct_answer" name="correct_answer">
                           <option value="1">Answer 1</option>
                           <option value="2">Answer 2</option>
                           <option value="3">Answer 3</option>
                         </select><br><br>
-                        <button type="submit">Add Question</button>
-                        <button type="button" onclick="closePopup()">Cancel</button>
+                        <button class="btn btn-sm btn-success" type="submit">Add Question</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="closePopup()">Cancel</button>
                       </form>
-                  </div>
+                    </div>
 
-<!-- Button to open popup -->
-<button onclick="openPopup()">Add New Question</button>
+                    <!-- Open Question Option Popup -->
+                    <div class="popup" id="popup-question-option">
+                      <h2 style="font-weight: 800;">Opsi Jawaban</h2>
+                        <div id="popup-body">
+                          <!-- Isi Konten dari Javascript -->
+                          <br>
+                        </div>
+                      <button class="btn btn-sm btn-danger" type="button" onclick="closePopupOption()">Close</button>
+                    </div>
+
+                    <div class="popup" id="popup-question-delete">
+                      <h2 style="text-align:center; font-weight: 800;">Apakah anda yakin akan menghapus pertanyaan ini?</h2>
+                      <div id="popup-footer">
+
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -346,13 +380,67 @@ if ($conn->connect_errno) {
 <!-- JavaScript function to open and close popup -->
 <script>
     function openPopup() {
-        document.getElementById("popup").style.display = "block";
-        document.getElementById("overlay").style.display = "block";
+        document.getElementById("popup-new-question").style.display = "block";
+        // document.getElementById("overlay").style.display = "block";
     }
 
     function closePopup() {
-        document.getElementById("popup").style.display = "none";
-        document.getElementById("overlay").style.display = "none";
+        document.getElementById("popup-new-question").style.display = "none";
+        // document.getElementById("overlay").style.display = "none";
+    }
+
+    function openPopupOption(question_id) {
+        var id_question = question_id;
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("popup-body").innerHTML = this.responseText;
+            document.getElementById("popup-question-option").style.display = "block";
+          }
+        };
+
+        xhr.open("GET","get_list_answer.php?id_question=" + id_question, true);
+        xhr.send();
+    }
+
+    function closePopupOption() {
+        document.getElementById("popup-question-option").style.display = "none";
+        // document.getElementById("overlay").style.display = "none";
+    }
+
+    function openPopupDelete(question_id) {
+        var id_question = question_id;
+
+        var button = "<div style='text-align:center; margin-top: 20px;'>" +
+        "<button type='button' class='btn btn-sm btn-danger mr-2' onclick='deleteQuestion("+id_question+")'>HAPUS</button>" +
+        "<button type='button' class='btn btn-sm btn-info' onclick='closePopupDelete()'>CANCEL</button></div>";
+
+        document.getElementById("popup-footer").innerHTML += button;
+
+        document.getElementById("popup-question-delete").style.display = "block";
+    }
+
+    function closePopupDelete() {
+      document.getElementById("popup-footer").innerHTML = "";
+      document.getElementById("popup-question-delete").style.display = "none";
+    }
+
+    function deleteQuestion(question_id) {
+        var id_question = question_id;
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            alert('Berhasil dihapus!');
+            document.getElementById("popup-question-delete").style.display = "none";
+
+            location.reload();
+          }
+        }
+
+        xhr.open("GET","delete_question.php?id_question=" + id_question, true);
+        xhr.send();
     }
 
     // JavaScript function to remove question row

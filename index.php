@@ -1,3 +1,9 @@
+<?php
+$conn = new mysqli("localhost", "root", "", "web_stnikolas");
+if ($conn->connect_errno) {
+    die("Failed to connect to MySQL: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,21 +119,33 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 mb-3">
-                    <div class="section-title">
+                    <div class="section-title justify-content-center">
                         <h4 class="m-0 text-uppercase font-weight-bold">Waktunya Quiz</h4>
                     </div>
-                    <div class="section-article bg-white p-3">
+                    <div class="section-article bg-white p-3 text-center">
                         <p>Wahh, gimana teman-teman? Teman-teman sudah mengenal siapa itu Santo Nikolas kan? Nahh, untuk melatih pemahaman teman-teman, silahkan klik tombol mini kuis dibawah ini dan jawab pertanyaan yang tertera yaa!</p>
                     </div>
                     <div class="section-video bg-white p-3 text-center">
-                        <iframe src="https://www.youtube.com/embed/XjPtc8MJO7M" frameborder="0" allowfullscreen></iframe>
+                        <button class="btn btn-block btn-success" onclick="openPopupQuiz()">MULAI MENGERKJAKAN QUIZ</button>
                     </div>
-                    <div class="section-article bg-white p-3">
-                        <p>Semoga video di atas bisa memberikan wawasan lebih untuk teman-teman tentang Santa Claus yaa, juga supaya teman-teman tahu kalau Santa Claus itu adalah seorang Santo pelindung anak-anak, loh!</p>
+                    <div class="section-article bg-white p-3 text-center">
+                        <p>Semoga pembelajaran di atas bisa memberikan wawasan lebih untuk teman-teman tentang Santa Claus yaa, juga supaya teman-teman tahu kalau Santa Claus itu adalah seorang Santo pelindung anak-anak, loh!</p>
                         <b>Tuhan memberkati!</b>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Open Pop Up Quiz -->
+    <div class="popup" id="popup-quiz">
+        <h2>Quiz Santo Nikolas!</h2>
+        
+        <div class="popup-quiz-body">
+            <!-- Masukin Desain + Pertanyaan + Jawaban pake PHP Di Sini -->
+        </div>
+        <div class="popup-quiz-footer text-center">
+            <button class="btn btn-sm btn-success" onclick="">SUBMIT QUIZ</button>
+            <button class="btn btn-sm btn-danger" onclick="closePopupQuiz()">CANCEL</button>
         </div>
     </div>
     <!-- Bagian Quiz End -->
@@ -137,6 +155,18 @@
         <p class="m-0 text-center text-white" style="font-family: 'Open Sans',sans-serif">&copy; Dibuat Oleh David Danasuta</p> 
     </div>
     <!-- Bagian Footer End -->
+
+    <script>
+        function openPopupQuiz()
+        {
+            document.getElementById("popup-quiz").style.display = "block";
+        }
+
+        function closePopupQuiz()
+        {
+            document.getElementById("popup-quiz").style.display = "none";
+        }
+    </script>
 
 
 </body>
