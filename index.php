@@ -22,10 +22,9 @@ if ($conn->connect_errno) {
 </head>
 <body>
     <!-- Top Navigation Bar -->
-    <!-- <div class="topnav">
-        <a class="active" href="#login">Login</a>
-        <a href="#Sign Up"><b>Sign Up</a></b>
-    </div> -->
+    <div class="topnav">
+        <a class="active" href="login.html">Login Admin</a>
+    </div>
     <!-- Bagian Banner -->
     <div class="mb-3">
         <div class="row">
@@ -104,8 +103,14 @@ if ($conn->connect_errno) {
                         <div class="section-title">
                             <h4 class="m-0 text-uppercase font-weight-bold">Refrensi</h4>
                         </div>
-                        <div class="bg-white text-center border border-top-0 p-3">
-
+                        <div class="bg-white text-left border border-top-0 p-3">
+                            <a style="color: blue;" href="https://katakombe.org/para-kudus/desember/nikolas-dari-myra.html">Katakombe.org</a>
+                            &nbsp;<b>-</b>&nbsp;
+                            <a style="color: blue;" href="https://carmelia.net/index.php/artikel/riwayat-para-kudus/372-santo-nikolas-dari-mira?showall=1&limitstart=">Carmelia.net</a>
+                            &nbsp;<b>-</b>&nbsp;
+                            <a style="color: blue;" href="https://www.stnicholascenter.org/who-is-st-nicholas">StNicholasCenter.org</a>
+                            &nbsp;<b>-</b>&nbsp;
+                            <a style="color: blue;" href="https://www.britannica.com/biography/Saint-Nicholas">Britannica.com</a>
                         </div>
                     </div>
                 </div>
@@ -138,10 +143,53 @@ if ($conn->connect_errno) {
     </div>
     <!-- Open Pop Up Quiz -->
     <div class="popup" id="popup-quiz">
-        <h2>Quiz Santo Nikolas!</h2>
+        <h2 style="text-align: center;">Quiz Santo Nikolas!</h2>
         
         <div class="popup-quiz-body">
             <!-- Masukin Desain + Pertanyaan + Jawaban pake PHP Di Sini -->
+            <?php 
+                $conn = new mysqli("localhost", "root", "", "web_stnikolas");
+                if ($conn->connect_errno) {
+                    die("Failed to connect to MySQL: " . $conn->connect_error);
+                }
+                $sql ="SELECT q.id_questions, q.question_text, a.id_answers, a.answers_text
+                        FROM questions as q JOIN answers as a ON q.id_questions = a.id_questions";
+                $res = $conn->query($sql);
+                $questions = array(); // Array to store questions
+
+                if ($res->num_rows > 0) {
+                    // Store questions and answers in an array
+                    while($row = $res->fetch_assoc()) {
+                        $question_id = $row['id_questions'];
+                        if (!isset($questions[$question_id])) {
+                            $questions[$question_id] = array(
+                                'question_text' => $row['question_text'],
+                                'answers' => array()
+                            );
+                        }
+                        $questions[$question_id]['answers'][] = array(
+                            'id' => $row['id_answers'],
+                            'text' => $row['answers_text']
+                        );
+                    }
+                    $number = 1;
+                    // Display each question and its answers with radio buttons
+                    foreach ($questions as $question_id => $question) {
+                        echo "<h5 style= 'text-align: center;'>";
+                        echo "<div><b>" . $number++ . '.&nbsp;' . $question['question_text'] . "</b></div>";
+                        echo "<div>";
+                        foreach ($question['answers'] as $answer) {
+                            echo "<input type='radio' name='answer_" . $question_id . "' value='" . $answer['id'] . "'>&nbsp;" . $answer['text'] . "&nbsp;&nbsp;&nbsp;";
+                        }
+                        echo "</div></h5>";
+                        echo "&nbsp;";
+                    }
+                } else {
+                    echo "No questions found.";
+                }
+
+                $conn->close();
+            ?>
         </div>
         <div class="popup-quiz-footer text-center">
             <button class="btn btn-sm btn-success" onclick="">SUBMIT QUIZ</button>
@@ -166,6 +214,7 @@ if ($conn->connect_errno) {
         {
             document.getElementById("popup-quiz").style.display = "none";
         }
+
     </script>
 
 

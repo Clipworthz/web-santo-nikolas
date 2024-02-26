@@ -216,7 +216,7 @@ if ($conn->connect_errno) {
             </div>
           </li>
           <li class="nav-item" style="border-bottom:1px solid #0a335f">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" data-toggle="collapse" href="login.html" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-title"><b>Logout</b></span>
             </a>
             <div class="collapse" id="ui-basic">
@@ -259,9 +259,6 @@ if ($conn->connect_errno) {
                             <th>
                               Pertanyaan
                             </th>
-                            <th>
-                              Gambar Pertanyaan
-                            </th>
                             <th style="width: 400px;">
                               Jawaban
                             </th>
@@ -285,8 +282,8 @@ if ($conn->connect_errno) {
                       //   "Apa bahasa belanda dari nama Santa Claus?" => array("A. Mr Sancta", "B. Sanct Herr Nicholaas", "C. Bapak Natal")
                       // );
 
-                      $sql_question = "SELECT id_question, question_text, question_pic
-                      FROM questions GROUP BY id_question";
+                      $sql_question = "SELECT id_questions, question_text
+                      FROM questions GROUP BY id_questions";
                       
                       $number = 1;
 
@@ -297,17 +294,8 @@ if ($conn->connect_errno) {
                           echo "<tr>";
                             echo "<td>". $number++ ."</td>";
                             echo "<td style='width:65%'>". $row_question["question_text"] ."</td>";
-                            
-                            if($row_question["question_pic"] != null)
-                            {
-                              echo "<td><button class='btn btn-sm btn-info'>TAMPILKAN GAMBAR</button></td>";
-                            }
-                            else
-                            {
-                              echo "<td>Tidak Ada Gambar</td>";
-                            }
-                            echo "<td><button class='btn btn-sm btn-success' onClick='openPopupOption(".$row_question['id_question'].")'>TAMPILKAN OPSI</button></td>";
-                            echo "<td><button class='btn btn-sm btn-danger' onClick='openPopupDelete(".$row_question['id_question'].")'>HAPUS PERTANYAAN</button></td>";
+                            echo "<td><button class='btn btn-sm btn-success' onClick='openPopupOption(".$row_question['id_questions'].")'>TAMPILKAN OPSI</button></td>";
+                            echo "<td><button class='btn btn-sm btn-danger' onClick='openPopupDelete(".$row_question['id_questions'].")'>HAPUS PERTANYAAN</button></td>";
                           echo "</tr>";
                         }
                       }

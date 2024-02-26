@@ -6,8 +6,8 @@
 
     $id_question = $_GET['id_question'];
 
-    $sql_answer = "SELECT id_answer, answer_text, is_true_answer, question_id
-    FROM answers WHERE question_id = " . $id_question;
+    $sql_answer = "SELECT id_answers, answers_text, is_true_answers, id_questions
+    FROM answers WHERE id_questions = " . $id_question;
 
     $result_answer = $conn->query($sql_answer);
 
@@ -16,15 +16,15 @@
         $number = 1;
         while($row_answer = $result_answer->fetch_assoc()) {
             
-            if($row_answer['is_true_answer'] == 1)
+            if($row_answer['is_true_answers'] == 1)
             {
                 echo "<label for='answer'>Answer ". $number++." (True)</label><br>";
-                echo "<input type='text' style='font-weight:600; margin-bottom:10px;' disabled='true' id='answer_'".$row_answer['id_answer']."name='answer_".$row_answer['id_answer']."' value='".$row_answer['answer_text']."'><br>";
+                echo "<input type='text' style='font-weight:600; margin-bottom:10px;' disabled='true' id='answer_'".$row_answer['id_answers']."name='answer_".$row_answer['id_answers']."' value='".$row_answer['answers_text']."'><br>";
             }
             else
             {
                 echo "<label for='answer'>Answer ". $number++."</label><br>";
-                echo "<input type='text' style='margin-bottom:10px;' disabled='true' id='answer_'".$row_answer['id_answer']."name='answer_".$row_answer['id_answer']."' value='".$row_answer['answer_text']."'><br>";
+                echo "<input type='text' style='margin-bottom:10px;' disabled='true' id='answer_'".$row_answer['id_answers']."name='answer_".$row_answer['id_answers']."' value='".$row_answer['answers_text']."'><br>";
             }
         }
         echo "<br>";
