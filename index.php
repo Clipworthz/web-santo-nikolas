@@ -147,12 +147,13 @@ if ($conn->connect_errno) {
         
         <div class="popup-quiz-body">
             <!-- Masukin Desain + Pertanyaan + Jawaban pake PHP Di Sini -->
+            <form id="quiz-form">
             <?php 
                 $conn = new mysqli("localhost", "root", "", "web_stnikolas");
                 if ($conn->connect_errno) {
                     die("Failed to connect to MySQL: " . $conn->connect_error);
                 }
-                $sql ="SELECT q.id_questions, q.question_text, a.id_answers, a.answers_text
+                $sql ="SELECT q.id_questions, q.question_text, a.id_answers, a.answers_text, a.is_true_answers
                         FROM questions as q JOIN answers as a ON q.id_questions = a.id_questions";
                 $res = $conn->query($sql);
                 $questions = array(); // Array to store questions
@@ -169,7 +170,8 @@ if ($conn->connect_errno) {
                         }
                         $questions[$question_id]['answers'][] = array(
                             'id' => $row['id_answers'],
-                            'text' => $row['answers_text']
+                            'text' => $row['answers_text'],
+                            'is_true_answer' => $row['is_true_answers']
                         );
                     }
                     $number = 1;
@@ -179,7 +181,7 @@ if ($conn->connect_errno) {
                         echo "<div><b>" . $number++ . '.&nbsp;' . $question['question_text'] . "</b></div>";
                         echo "<div>";
                         foreach ($question['answers'] as $answer) {
-                            echo "<input type='radio' name='answer_" . $question_id . "' value='" . $answer['id'] . "'>&nbsp;" . $answer['text'] . "&nbsp;&nbsp;&nbsp;";
+                            echo "<input type='radio' id='answer' name='answer_" . $question_id . "' value='" . $answer['is_true_answer'] . "'>&nbsp;" . $answer['text'] . "&nbsp;&nbsp;&nbsp;";
                         }
                         echo "</div></h5>";
                         echo "&nbsp;";
@@ -190,9 +192,10 @@ if ($conn->connect_errno) {
 
                 $conn->close();
             ?>
+            </form>
         </div>
         <div class="popup-quiz-footer text-center">
-            <button class="btn btn-sm btn-success" onclick="">SUBMIT QUIZ</button>
+            <button class="btn btn-sm btn-success" onclick="submitQuiz()">SUBMIT QUIZ</button>
             <button class="btn btn-sm btn-danger" onclick="closePopupQuiz()">CANCEL</button>
         </div>
     </div>
@@ -213,6 +216,48 @@ if ($conn->connect_errno) {
         function closePopupQuiz()
         {
             document.getElementById("popup-quiz").style.display = "none";
+        }
+
+        function submitQuiz()
+        {
+            var quizForm = document.getElementById("quiz-form");
+            var selectedOption = {};
+            var mark = 0;
+            var question = 0;
+            
+            var options = quizForm.querySelectorAll('input[type="radio"]');
+            options.forEach(option => {
+                if(option.checked) {
+                    var optionValue = option.value;
+
+                    if(optionValue == 1)
+                    {
+                        question++
+                        mark = mark+1;
+                    }
+                    else if(optionValue == 0)
+                    {
+                        question++
+                    }
+                }
+            });
+
+            var result = Math.round((mark/question)*100);
+
+            if(result <= 50)
+            {
+                alert("Silahkan coba lagi, nilai anda adalah : " + result);
+            }
+            else if(result > 50 && result <= 75)
+            {
+                alert("Wah hampir saja, nilai anda adalah : " + result);
+            }
+            else if(result > 75)
+            {
+                alert("Hebat sekali, nilai anda adalah : " + result);
+            }
+
+            location.reload();
         }
 
     </script>
