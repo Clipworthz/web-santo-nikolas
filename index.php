@@ -198,6 +198,9 @@ if ($conn->connect_errno) {
             <button class="btn btn-sm btn-success" onclick="submitQuiz()">SUBMIT QUIZ</button>
             <button class="btn btn-sm btn-danger" onclick="closePopupQuiz()">CANCEL</button>
         </div>
+        <div id="custom-alert" class="custom-alert">
+            <span id="alert-text" class="alert-text"></span>
+        </div>
     </div>
     <!-- Bagian Quiz End -->
 
@@ -226,6 +229,7 @@ if ($conn->connect_errno) {
             var question = 0;
             
             var options = quizForm.querySelectorAll('input[type="radio"]');
+            var totalQuestions = options.length / 3;
             options.forEach(option => {
                 if(option.checked) {
                     var optionValue = option.value;
@@ -241,6 +245,11 @@ if ($conn->connect_errno) {
                     }
                 }
             });
+
+            if (question < totalQuestions) {
+                alert ("Tidak bisa submit, silahkan isi semua jawaban terlebih dahulu");
+                return;
+            }
 
             var result = Math.round((mark/question)*100);
 
