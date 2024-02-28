@@ -3,6 +3,7 @@ $conn = new mysqli("localhost", "root", "", "web_stnikolas");
 if ($conn->connect_errno) {
     die("Failed to connect to MySQL: " . $conn->connect_error);
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +24,7 @@ if ($conn->connect_errno) {
 <body>
     <!-- Top Navigation Bar -->
     <div class="topnav">
-        <a class="active" href="login.html">Login Admin</a>
+        <a class="active" href="login.php">Login Admin</a>
     </div>
     <!-- Bagian Banner -->
     <div class="mb-3">

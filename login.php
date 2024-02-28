@@ -1,3 +1,9 @@
+<?php
+$conn = new mysqli("localhost", "root", "", "web_stnikolas");
+if ($conn->connect_errno) {
+    die("Failed to connect to MySQL: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,17 +19,15 @@
 <body>
 <div class="wrapper">
     <div class="inner">
-    <form action>
-    <h3>Login Admin</h3>
-    <div class="form-holder">
-    <input type="text" class="form-control" placeholder="Username">
-    </div>
-    <div class="form-holder">
-    <input type="password" class="form-control" placeholder="Password">
-    </div>
-    <button>
-    <span href="index-admin.php">Login</span>
-    </button>
+    <form action="login_process.php" method="post">
+        <h3>Login Admin</h3>
+        <div class="form-holder">
+            <input type="text" name="username" class="form-control" placeholder="Username">
+        </div>
+        <div class="form-holder">
+            <input type="password" name="password" class="form-control" placeholder="Password">
+        </div>
+        <button type="submit">Login</button>
     </form>
     <img src="images/image-2.png" alt class="image-2">
     </div>

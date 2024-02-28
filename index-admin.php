@@ -1,8 +1,13 @@
 <?php 
+session_start();
+if(!isset($_SESSION['username'])){
+    header("Location: login.php");
+}
 $conn = new mysqli("localhost", "root", "", "web_stnikolas");
 if ($conn->connect_errno) {
     die("Failed to connect to MySQL: " . $conn->connect_error);
 } 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

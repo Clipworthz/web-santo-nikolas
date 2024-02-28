@@ -10,7 +10,7 @@
 
     $sql_delete_answer = "DELETE FROM answers WHERE id_questions =" . $id_question;
 
-    $result_delete_answer = $conn->query($sql_delete_answer);
+    $result_delete_answer = $conn->query($sql_delete_answer); 
 
     $sql_delete_question = "DELETE FROM questions WHERE id_questions =" . $id_question;
 
