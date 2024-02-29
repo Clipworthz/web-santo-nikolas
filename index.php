@@ -23,21 +23,22 @@ if ($conn->connect_errno) {
 </head>
 <body>
     <!-- Top Navigation Bar -->
-    <div class="topnav">
-        <a class="active" href="login.php">Login Admin</a>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="topnav">
+                <a class="active" href="login.php">Login Admin</a>
+            </div>
+        </div>
     </div>
     <!-- Bagian Banner -->
     <div class="mb-3">
         <div class="row">
             <div class="col-lg-12">
                 <div class="banner-blue owl-carousel main-carousel position-relative overflow-hidden">
-                    <img class="img-fluid" src="images/church-banner.jpg" style="object-fit: cover;">
+                    <img class="col-lg-12 img-fluid" src="images/church-banner.jpg" style="object-fit: cover;">
                     <div class="overlay justify-content-center">
                         <div class="banner-title mb-2">
                             <h2>SANTO NIKOLAS DARI MYRA</h2>
-                            <div class="button-container">
-                                <button class="btn btn-md btn-secondary mr-2">Mulai Cari Tahu</button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -102,7 +103,7 @@ if ($conn->connect_errno) {
                     <!-- Bagian Biografi End -->
                     <div class="mb-3">
                         <div class="section-title">
-                            <h4 class="m-0 text-uppercase font-weight-bold">Refrensi</h4>
+                            <h4 class="m-0 text-uppercase font-weight-bold">Referensi</h4>
                         </div>
                         <div class="bg-white text-left border border-top-0 p-3">
                             <a style="color: blue;" href="https://katakombe.org/para-kudus/desember/nikolas-dari-myra.html">Katakombe.org</a>
@@ -145,9 +146,7 @@ if ($conn->connect_errno) {
     <!-- Open Pop Up Quiz -->
     <div class="popup" id="popup-quiz">
         <h2 style="text-align: center;">Quiz Santo Nikolas!</h2>
-        
         <div class="popup-quiz-body">
-            <!-- Masukin Desain + Pertanyaan + Jawaban pake PHP Di Sini -->
             <form id="quiz-form">
             <?php 
                 $conn = new mysqli("localhost", "root", "", "web_stnikolas");
@@ -260,7 +259,7 @@ if ($conn->connect_errno) {
             }
             else if(result > 50 && result <= 75)
             {
-                alert("Wah hampir saja, nilai anda adalah : " + result);
+                alert("Yuk pasti bisa lebih baik, nilai anda adalah : " + result);
             }
             else if(result > 75)
             {

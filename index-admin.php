@@ -1,8 +1,8 @@
 <?php 
-session_start();
-if(!isset($_SESSION['username'])){
-    header("Location: login.php");
-}
+// session_start();
+// if(!isset($_SESSION['username'])){
+//     header("Location: login.php");
+// }
 $conn = new mysqli("localhost", "root", "", "web_stnikolas");
 if ($conn->connect_errno) {
     die("Failed to connect to MySQL: " . $conn->connect_error);
@@ -274,19 +274,6 @@ if ($conn->connect_errno) {
                       </thead>
                       <tbody>
                       <?php
-                      // $questions = array(
-                      //   "Siapa nama tokoh asli Santo Nikolas?" => array("A. Santo Benediktus", "B. Santo Albertus", "C. Santo Nikolas"),
-                      //   "Siapa nama orang tua Santo Nikolas?" => array("A. Theophanes dan Joan", "B. Samuel dan Brigitta", "C. Stefanus dan Maria"),
-                      //   "Tahun berapa Santo Nikolas lahir?" => array("A. Tahun 270", "B. Tahun 300", "C. Tahun 343"),
-                      //   "Dimanakah Santo Nikolas lahir?" => array("A. Patara", "B. Myra", "C. Roma"),
-                      //   "Santo Nikolas merupakan Santo Pelindung apa?" => array("A. Pelindung Anak-anak", "B. Pelindung Orang Sakit", "C. Pelindung Perjalanan"),
-                      //   "Apa peristiwa buruk yang dialami oleh Santo Nikolas saat masih kecil?" => array("A. Hartanya dirampas orang", "B. Orangtuanya meninggal karena wabah penyakit", "C. Ia dijauhi oleh"),
-                      //   "Paman dari Nikolas adalah seorang .... Patara." => array("A. Biarawan", "B. Uskup", "C. Romo"),
-                      //   "Apa kebaikan terkenal yang pernah dilakukan oleh Santo Nikolas?" => array("A. Menyelamatkan seorang bapak dan 3 puterinya", "B. Menyembuhkan orang sakit", "C. Membangun Gereja untuk umatnya"),
-                      //   "Tanggal berapa Santo Nikolas meninggal?" => array("A. 10 Maret 343", "B. 25 Agustus 343", "C. 6 Desember 343"),
-                      //   "Apa bahasa belanda dari nama Santa Claus?" => array("A. Mr Sancta", "B. Sanct Herr Nicholaas", "C. Bapak Natal")
-                      // );
-
                       $sql_question = "SELECT id_questions, question_text
                       FROM questions GROUP BY id_questions";
                       
@@ -297,7 +284,7 @@ if ($conn->connect_errno) {
                       if($result_question->num_rows > 0) {
                         while($row_question = $result_question->fetch_assoc()) {
                           echo "<tr>";
-                            echo "<td>". $number++ ."</td>";
+                            echo "<td>". $number++ ."."."</td>";
                             echo "<td style='width:65%'>". $row_question["question_text"] ."</td>";
                             echo "<td><button class='btn btn-sm btn-success' onClick='openPopupOption(".$row_question['id_questions'].")'>TAMPILKAN OPSI</button></td>";
                             echo "<td><button class='btn btn-sm btn-danger' onClick='openPopupDelete(".$row_question['id_questions'].")'>HAPUS PERTANYAAN</button></td>";
