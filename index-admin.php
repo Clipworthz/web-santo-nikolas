@@ -1,12 +1,15 @@
 <?php 
-// session_start();
-// if(!isset($_SESSION['username'])){
-//     header("Location: login.php");
-// }
+session_start();
 $conn = new mysqli("localhost", "root", "", "web_stnikolas");
 if ($conn->connect_errno) {
-    die("Failed to connect to MySQL: " . $conn->connect_error);
+    echo "Failed to connect to MySQL: " . $conn->connect_error;
 } 
+if(!isset($_SESSION['username'])){
+  session_unset();
+  session_destroy();
+  header("Location: login.php");
+  exit();
+}
 
 ?>
 <!DOCTYPE html>
@@ -60,145 +63,6 @@ if ($conn->connect_errno) {
         <a style="font-size:20px; color:white; background-color:#0a335f;"class="navbar-brand brand-logo px-5" href="index-admin.php">Admin Santo Nikolas</a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
-        <ul class="navbar-nav navbar-nav-right">
-          <!-- <li class="nav-item nav-profile dropdown">
-            <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-              <div class="nav-profile-img">
-                <img src="images/faces/face1.jpg" alt="image">
-                <span class="availability-status online"></span>             
-              </div>
-              <div class="nav-profile-text">
-                <p class="mb-1 text-black">David Greymaax</p>
-              </div>
-            </a>
-            <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" href="#">
-                <i class="mdi mdi-cached mr-2 text-success"></i>
-                Activity Log
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">
-                <i class="mdi mdi-logout mr-2 text-primary"></i>
-                Signout
-              </a>
-            </div>
-          </li> -->
-          <!-- <li class="nav-item d-none d-lg-block full-screen-link">
-            <a class="nav-link">
-              <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
-            </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-              <i class="mdi mdi-email-outline"></i>
-              <span class="count-symbol bg-warning"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-              <h6 class="p-3 mb-0">Messages</h6>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="images/faces/face4.jpg" alt="image" class="profile-pic">
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a message</h6>
-                  <p class="text-gray mb-0">
-                    1 Minutes ago
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="images/faces/face2.jpg" alt="image" class="profile-pic">
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a message</h6>
-                  <p class="text-gray mb-0">
-                    15 Minutes ago
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                    <img src="images/faces/face3.jpg" alt="image" class="profile-pic">
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture updated</h6>
-                  <p class="text-gray mb-0">
-                    18 Minutes ago
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <h6 class="p-3 mb-0 text-center">4 new messages</h6>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-              <i class="mdi mdi-bell-outline"></i>
-              <span class="count-symbol bg-danger"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-              <h6 class="p-3 mb-0">Notifications</h6>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-success">
-                    <i class="mdi mdi-calendar"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-                  <p class="text-gray ellipsis mb-0">
-                    Just a reminder that you have an event today
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-warning">
-                    <i class="mdi mdi-settings"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                  <p class="text-gray ellipsis mb-0">
-                    Update dashboard
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-info">
-                    <i class="mdi mdi-link-variant"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Launch Admin</h6>
-                  <p class="text-gray ellipsis mb-0">
-                    New admin wow!
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <h6 class="p-3 mb-0 text-center">See all notifications</h6>
-            </div>
-          </li>
-          <li class="nav-item nav-logout d-none d-lg-block">
-            <a class="nav-link" href="#">
-              <i class="mdi mdi-power"></i>
-            </a>
-          </li>
-          <li class="nav-item nav-settings d-none d-lg-block">
-            <a class="nav-link" href="#">
-              <i class="mdi mdi-format-line-spacing"></i>
-            </a>
-          </li> -->
-        </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>
         </button>
@@ -213,23 +77,11 @@ if ($conn->connect_errno) {
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-title"><b>Mini Quiz</b></span>
             </a>
-            <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-              </ul>
-            </div>
           </li>
           <li class="nav-item" style="border-bottom:1px solid #0a335f">
-            <a class="nav-link" data-toggle="collapse" href="login.html" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" data-toggle="collapse" href="logout.php" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-title"><b>Logout</b></span>
             </a>
-            <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-              </ul>
-            </div>
           </li>
         </ul>
       </nav>
@@ -320,7 +172,7 @@ if ($conn->connect_errno) {
                       </form>
                     </div>
 
-                    <!-- Open Question Option Popup -->
+                    <!-- Tampilkan Opsi Jawaban -->
                     <div class="popup" id="popup-question-option">
                       <h2 style="font-weight: 800;">Opsi Jawaban</h2>
                         <div id="popup-body">
@@ -361,12 +213,10 @@ if ($conn->connect_errno) {
 <script>
     function openPopup() {
         document.getElementById("popup-new-question").style.display = "block";
-        // document.getElementById("overlay").style.display = "block";
     }
 
     function closePopup() {
         document.getElementById("popup-new-question").style.display = "none";
-        // document.getElementById("overlay").style.display = "none";
     }
 
     function openPopupOption(question_id) {
@@ -386,7 +236,6 @@ if ($conn->connect_errno) {
 
     function closePopupOption() {
         document.getElementById("popup-question-option").style.display = "none";
-        // document.getElementById("overlay").style.display = "none";
     }
 
     function openPopupDelete(question_id) {
@@ -423,7 +272,6 @@ if ($conn->connect_errno) {
         xhr.send();
     }
 
-    // JavaScript function to remove question row
     function removeQuestion(button) {
         var row = button.parentNode.parentNode;
         row.remove();

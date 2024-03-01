@@ -1,7 +1,7 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "web_stnikolas");
 if ($conn->connect_errno) {
-    die("Failed to connect to MySQL: " . $conn->connect_error);
+    echo "Failed to connect to MySQL: " . $conn->connect_error;
 }
 
 ?>
@@ -149,17 +149,12 @@ if ($conn->connect_errno) {
         <div class="popup-quiz-body">
             <form id="quiz-form">
             <?php 
-                $conn = new mysqli("localhost", "root", "", "web_stnikolas");
-                if ($conn->connect_errno) {
-                    die("Failed to connect to MySQL: " . $conn->connect_error);
-                }
                 $sql ="SELECT q.id_questions, q.question_text, a.id_answers, a.answers_text, a.is_true_answers
                         FROM questions as q JOIN answers as a ON q.id_questions = a.id_questions";
                 $res = $conn->query($sql);
-                $questions = array(); // Array to store questions
+                $questions = array();
 
                 if ($res->num_rows > 0) {
-                    // Store questions and answers in an array
                     while($row = $res->fetch_assoc()) {
                         $question_id = $row['id_questions'];
                         if (!isset($questions[$question_id])) {
@@ -175,7 +170,6 @@ if ($conn->connect_errno) {
                         );
                     }
                     $number = 1;
-                    // Display each question and its answers with radio buttons
                     foreach ($questions as $question_id => $question) {
                         echo "<h5 style= 'text-align: center;'>";
                         echo "<div><b>" . $number++ . '.&nbsp;' . $question['question_text'] . "</b></div>";
@@ -189,8 +183,6 @@ if ($conn->connect_errno) {
                 } else {
                     echo "No questions found.";
                 }
-
-                $conn->close();
             ?>
             </form>
         </div>

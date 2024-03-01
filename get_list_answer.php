@@ -1,7 +1,7 @@
 <?php
     $conn = new mysqli("localhost", "root", "", "web_stnikolas");
     if ($conn->connect_errno) {
-        die("Failed to connect to MySQL: " . $conn->connect_error);
+        echo "Failed to connect to MySQL: " . $conn->connect_error;
     }
 
     $id_question = $_GET['id_question'];
@@ -32,4 +32,5 @@
     else {
         echo "Opsi jawaban tidak ditemukan!";
     }
+    $conn->close();
 ?>
